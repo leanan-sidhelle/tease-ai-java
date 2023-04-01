@@ -27,6 +27,7 @@
 plugins {
     id "java"
     id "io.toolebox.git-versioner"
+    id "maven-publish"
 }
 
 repositories {
@@ -43,6 +44,18 @@ testing {
     suites {
         test {
             useJUnitJupiter("5.9.1")
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven { url = "${project.rootDir}/releases" }
+    }
+    
+    publications {
+        maven(MavenPublication) {
+            from components.java
         }
     }
 }
