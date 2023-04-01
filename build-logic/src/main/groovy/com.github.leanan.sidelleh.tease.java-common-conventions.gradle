@@ -26,6 +26,7 @@
  */
 plugins {
     id "java"
+    id "io.toolebox.git-versioner"
 }
 
 repositories {
