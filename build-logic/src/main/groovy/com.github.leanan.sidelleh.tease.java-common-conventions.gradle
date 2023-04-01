@@ -29,6 +29,7 @@ plugins {
     id "io.toolebox.git-versioner"
     id "maven-publish"
     id "com.github.spotbugs"
+    id "jacoco"
 }
 
 repositories {
