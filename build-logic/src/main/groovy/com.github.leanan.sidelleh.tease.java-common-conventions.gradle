@@ -32,6 +32,8 @@ plugins {
     id "jacoco"
 }
 
+group = "com.github.leanan.sidelleh"
+
 repositories {
     mavenCentral()
 }
