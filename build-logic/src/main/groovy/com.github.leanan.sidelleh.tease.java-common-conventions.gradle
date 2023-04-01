@@ -28,6 +28,7 @@ plugins {
     id "java"
     id "io.toolebox.git-versioner"
     id "maven-publish"
+    id "com.github.spotbugs"
 }
 
 repositories {
@@ -57,5 +58,23 @@ publishing {
         maven(MavenPublication) {
             from components.java
         }
+    }
+}
+
+def spotbugsInclude = project.file("spotbugs.include.xml")
+def spotbugsExclude = project.file("spotbugs.exclude.xml")
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+    reports { 
+        html { 
+            enabled = true
+        }
+    }
+    
+    if(spotbugsInclude.exists()) {
+        includeFilter = spotbugsInclude
+    }
+    
+    if(spotbugsExclude.exists()) {
+        excludeFilter = spotbugsExclude
     }
 }
