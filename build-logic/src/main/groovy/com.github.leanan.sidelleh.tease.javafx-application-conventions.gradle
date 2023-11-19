@@ -25,15 +25,6 @@
  * For more information, please refer to <https://unlicense.org>
  */
 plugins {
-    id "groovy-gradle-plugin"
-}
-
-repositories {
-    gradlePluginPortal()
-}
-
-dependencies {
-    implementation "gradle.plugin.io.toolebox:gradle-git-versioner:1.6.7"
-    implementation "com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.14"
-    implementation "org.openjfx:javafx-plugin:0.1.0"
+    id "com.github.leanan.sidelleh.tease.java-application-conventions"
+    id "org.openjfx.javafxplugin"
 }
