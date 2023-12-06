@@ -39,4 +39,5 @@ repositories {
 
 dependencies {
     implementation "gradle.plugin.io.toolebox:gradle-git-versioner:1.6.7"
+    implementation "com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.2"
 }
