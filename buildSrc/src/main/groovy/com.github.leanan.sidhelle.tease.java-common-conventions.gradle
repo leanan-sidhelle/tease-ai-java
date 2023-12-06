@@ -28,6 +28,7 @@ plugins {
     id "java" //basic java development plugin
     id "io.toolebox.git-versioner" //git versioning plugin
     id "com.github.spotbugs" //spotbugs static analysis
+    id "jacoco" //java testing code coverage analysis & reporting
 }
 
 repositories {
