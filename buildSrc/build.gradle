@@ -36,3 +36,7 @@ plugins {
 repositories {
     gradlePluginPortal() //main repository for community plugins
 }
+
+dependencies {
+    implementation "gradle.plugin.io.toolebox:gradle-git-versioner:1.6.7"
+}

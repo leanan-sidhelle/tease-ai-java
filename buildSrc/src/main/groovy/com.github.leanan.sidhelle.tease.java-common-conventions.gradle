@@ -26,6 +26,7 @@
 */
 plugins {
     id "java" //basic java development plugin
+    id "io.toolebox.git-versioner" //git versioning plugin
 }
 
 repositories {
