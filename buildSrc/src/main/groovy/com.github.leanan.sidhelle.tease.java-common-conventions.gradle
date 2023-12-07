@@ -29,7 +29,9 @@ plugins {
     id "io.toolebox.git-versioner" //git versioning plugin
     id "com.github.spotbugs" //spotbugs static analysis
     id "jacoco" //java testing code coverage analysis & reporting
+    id "maven-publish"
 }
+group = "com.github.leanan.sidhelle"
 
 repositories {
     mavenCentral() //main maven repository
@@ -55,4 +57,21 @@ java {
 
 tasks.named("test") {
     useJUnitPlatform() // Use JUnit Platform for unit tests.
+}
+
+publishing {
+   repositories {
+      maven { url = "${project.rootDir}/releases" } 
+   }
+   
+   publications {
+        maven(MavenPublication) {
+            /*
+             * not including group id, artifact, and version so it 
+             * defaults to dynamic model...
+             */
+             
+            from components.java //include compiled java from main
+        }
+    }
 }
