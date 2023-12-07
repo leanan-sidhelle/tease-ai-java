@@ -25,12 +25,9 @@
  * For more information, please refer to <https://unlicense.org>
 */
 plugins {
-    /*
-     * Apply the foojay-resolver plugin to allow automatic download of JDKs
-     */
-    id "org.gradle.toolchains.foojay-resolver-convention" version "0.7.0"
+    id "com.github.leanan.sidhelle.tease.java-library-conventions"
 }
 
-rootProject.name = "tease-ai-java"
+dependencies {
 
-include "tease-api"
+}
