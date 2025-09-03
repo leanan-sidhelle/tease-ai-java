@@ -31,3 +31,7 @@ plugins {
 repositories {
     gradlePluginPortal()
 }
+
+dependencies {
+    implementation "com.github.hierynomus.license-base:com.github.hierynomus.license-base.gradle.plugin:0.16.1"
+}

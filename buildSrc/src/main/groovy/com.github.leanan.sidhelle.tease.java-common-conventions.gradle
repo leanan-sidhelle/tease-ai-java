@@ -26,6 +26,7 @@
  */
 plugins {
     id "java"
+    id "com.github.hierynomus.license-base"
 }
 
 repositories {
@@ -52,4 +53,10 @@ java {
 
 tasks.named("test") {
     useJUnitPlatform()
+}
+
+license {
+    header rootProject.file("LICENSE")
+    headerURI "https://github.com/hierynomus/license-gradle-plugin"
+    strictCheck true
 }
