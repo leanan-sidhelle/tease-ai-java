@@ -25,9 +25,6 @@
  * For more information, please refer to <https://unlicense.org>
  */
 plugins {
-    // Apply the common convention plugin for shared build configuration between library and application projects.
-    id 'com.github.leanan.sidhelle.tease.java-common-conventions'
-
-    // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
+    id "com.github.leanan.sidhelle.tease.java-common-conventions"
+    id "application"
 }

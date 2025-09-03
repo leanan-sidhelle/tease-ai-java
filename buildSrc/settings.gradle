@@ -24,4 +24,4 @@
  * 
  * For more information, please refer to <https://unlicense.org>
  */
-rootProject.name = 'buildSrc'
+rootProject.name = "buildSrc"
