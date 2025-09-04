@@ -34,4 +34,5 @@ repositories {
 
 dependencies {
     implementation "com.github.hierynomus.license-base:com.github.hierynomus.license-base.gradle.plugin:0.16.1"
+    implementation "io.freefair.git-version:io.freefair.git-version.gradle.plugin:8.14.2"
 }
