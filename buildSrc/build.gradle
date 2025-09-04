@@ -35,4 +35,5 @@ repositories {
 dependencies {
     implementation "com.github.hierynomus.license-base:com.github.hierynomus.license-base.gradle.plugin:0.16.1"
     implementation "io.toolebox.git-versioner:io.toolebox.git-versioner.gradle.plugin:1.6.7"
+    implementation "com.github.spotbugs:com.github.spotbugs.gradle.plugin:6.2.7"
 }

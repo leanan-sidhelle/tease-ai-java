@@ -29,6 +29,7 @@ plugins {
     id "com.github.hierynomus.license-base"
     id "maven-publish"
     id "io.toolebox.git-versioner"
+    id "com.github.spotbugs"
 }
 
 group = "com.github.leanan.sidhelle"
@@ -78,4 +79,23 @@ publishing {
             url "${project.rootDir}/releases"
         }
    }
+}
+
+def spotbugsInclude = file("spotbugs-include.xml")
+def spotbugsExclude = file("spotbugs-exclude.xml")
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+
+    if(spotbugsInclude.exists()) {
+        includeFilter = spotbugsInclude
+    }
+
+    if(spotbugsExclude.exists()) {
+        excludeFilter = spotbugsExclude
+    }
+
+    reports {
+        html.enabled = true
+        xml.enabled = false
+    }
 }
