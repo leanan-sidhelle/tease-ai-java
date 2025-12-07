@@ -1,0 +1,38 @@
+plugins {
+    id "java"
+    id "io.toolebox.git-versioner"
+    //TODO:plugin for license checks and formatting...
+}
+
+group="com.github.leanan.sidhelle"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    constraints {
+        
+    }
+}
+
+testing {
+    suites {
+        test {
+            useJUnitJupiter("5.12.1")
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+import com.hierynomus.gradle.license.tasks.LicenseCheck;
+
+tasks.build {
+    // Add a dependency on all tasks of type LicenseCheck
+    dependsOn tasks.withType(LicenseCheck)
+}

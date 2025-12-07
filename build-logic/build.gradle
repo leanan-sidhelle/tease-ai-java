@@ -1,0 +1,11 @@
+plugins {
+    id "groovy-gradle-plugin"
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation "io.toolebox.git-versioner:io.toolebox.git-versioner.gradle.plugin:1.6.7"
+}

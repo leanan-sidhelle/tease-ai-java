@@ -1,0 +1,4 @@
+plugins {
+    id "com.github.leanan.sidhelle.java-library-conventions"
+    //TODO:spring conventions
+}

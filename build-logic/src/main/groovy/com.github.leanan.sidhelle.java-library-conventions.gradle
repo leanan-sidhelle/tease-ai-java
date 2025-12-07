@@ -1,0 +1,4 @@
+plugins {
+    id "com.github.leanan.sidhelle.java-common-conventions"
+    id "java-library"
+}
