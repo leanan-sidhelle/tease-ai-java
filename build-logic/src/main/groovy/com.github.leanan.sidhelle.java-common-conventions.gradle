@@ -29,10 +29,3 @@ java {
         languageVersion = JavaLanguageVersion.of(25)
     }
 }
-
-import com.hierynomus.gradle.license.tasks.LicenseCheck;
-
-tasks.build {
-    // Add a dependency on all tasks of type LicenseCheck
-    dependsOn tasks.withType(LicenseCheck)
-}
