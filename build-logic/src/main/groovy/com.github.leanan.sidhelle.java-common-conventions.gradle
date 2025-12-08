@@ -1,10 +1,11 @@
 plugins {
     id "java"
-    id "io.toolebox.git-versioner"
+    //TODO:WHY THE FLYING FUCK DID THE GIT VERSIONER PLUGIN FUCKING STOP WORKING!!!!
     //TODO:plugin for license checks and formatting...
 }
 
 group="com.github.leanan.sidhelle"
+version="0.0.1"
 
 repositories {
     mavenCentral()
