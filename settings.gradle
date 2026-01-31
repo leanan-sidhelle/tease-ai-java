@@ -9,3 +9,11 @@ plugins {
 rootProject.name = "tease-ai-java"
 
 include "teases:edger"
+
+include "lib:media-api"
+include "lib:tease-api"
+include "lib:utils-api"
+include "lib:spring-api"
+include "lib:spring-test-api"
+include "lib:statemachine-api"
+include "lib:statemachine-test-api"

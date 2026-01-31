@@ -1,0 +1,42 @@
+@startuml
+
+INITIALIZE : Initialize state variables
+WARMUP : Stimulate the subject to a baseline arousal (i.e. achieve an erection).
+TEASE : Use the configured stimulation pattern(s) to randomly stimulate the subject to the edge of orgasm and ruined orgasms.
+INDUCE_EDGE : Stimulate the subject to the edge of orgasm.
+INDUCE_RUIN : Stimulate the subject to a ruined orgasm.
+COOLDOWN : Suspend stimulation and allow the subject to lose arousal.
+CONFIG_ENDING : Configure the tease ending.
+ORGASM_ENDING1 : Stimulate the subject to a full orgasm.
+ORGASM_ENDING2 : Continue to stimulate the subject until the orgasm is complete.
+ENDING_POT : Continue to stimulate the subject for post-orgasm torture (POT).
+RUIN_ENDING : Stimulate the subject to a ruined orgasm.
+DENIED_ENDING : Deny the subject any orgasm.
+END : Final state.
+
+[*] --> INITIALIZE : / onInitialize()
+INITIALIZE --> WARMUP : after 100ms / onConfigWarmup()
+WARMUP --> DENIED_ENDING : every 100ms isEndSession() / onDeny()
+WARMUP --> TEASE : HARD / onConfigTease()
+WARMUP --> WARMUP : every 100ms / onStimulate()
+TEASE --> DENIED_ENDING : every 100ms isEndSession() / onDeny()
+TEASE --> INDUCE_EDGE : every 100ms isInduceEdge() / onInduceEdge()
+TEASE --> INDUCE_RUIN : every 100ms isInduceRuin() / onInduceRuin()
+TEASE --> TEASE : every 100ms / onStimulate()
+INDUCE_EDGE --> COOLDOWN : after 100ms / onConfigEdgeCooldown()
+INDUCE_RUIN --> COOLDOWN : after 100ms / onConfigRuinCooldown()
+COOLDOWN --> TEASE : every 100ms isCycleComplete() && isHard() / onConfigTease()
+COOLDOWN --> WARMUP : every 100ms isCycleComplete() && isSoft() / onConfigWarmup()
+COOLDOWN --> DENIED_ENDING : every 100ms isEndSession() / onDeny()
+COOLDOWN --> CONFIG_ENDING : every 100ms isComplete() / onConfigEnding()
+CONFIG_ENDING --> ORGASM_ENDING1 : after 100ms isOrgasmEnding() / onInduceOrgasm()
+CONFIG_ENDING --> RUIN_ENDING : after 100ms isRuinEnding() / onInduceRuin()
+CONFIG_ENDING --> DENIED_ENDING : after 100ms isDeniedEnding() / onDeny()
+ORGASM_ENDING1 --> ORGASM_ENDING2 : ORGASM
+ORGASM_ENDING2 --> ENDING_POT : after 5s 'TODO: how to make this an event based trigger?
+ENDING_POT --> END : every 100ms isCycleComplete() / onEndStimulation()
+RUIN_ENDING --> END : RUIN / onEndStimulation()
+DENIED_ENDING --> END : / onEndStimulation()
+END --> [*]
+
+@enduml

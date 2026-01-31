@@ -1,0 +1,113 @@
+/**
+ * This is free and unencumbered software released into the public domain.
+ * 
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ * 
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ * 
+ * For more information, please refer to <https://unlicense.org>
+ */
+
+package com.github.leanan.sidhelle.tease.edger;
+
+import com.github.leanan.sidhelle.tease.util.LoggingStateMachineListener;
+import com.github.leanan.sidhelle.tease.util.StateMachineUtils;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.statemachine.state.State;
+import org.springframework.stereotype.Component;
+
+/**
+ * TODO:
+ * @author L. Sidhelle &ltleanan-sidhelle@yahoo.com&gt
+ */
+@Component("edgerListener")
+public class TestingListener extends LoggingStateMachineListener<States,Events> {
+
+    /**
+     * The {@link Logger} for message logging.
+     */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(TestingListener.class);
+    
+    /**
+     * TODO:
+     */
+    private final Lock lock;
+    
+    /**
+     * TODO:
+     */
+    private States previous;
+    
+    /**
+     * TODO:
+     * @return 
+     */
+    public States getPreviousState() {
+        try {
+            lock.lock();
+            return previous;
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    /**
+     * TODO:
+     */
+    private States current;
+    
+    /**
+     * TODO:
+     * @return 
+     */
+    public States getCurrentState() {
+        try {
+            lock.lock();
+            return current;
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    /**
+     * Default constructor.
+     */
+    public TestingListener() {
+        super();
+        this.lock = new ReentrantLock();
+    }
+    
+    @Override
+    public void stateChanged(State<States,Events> from, State<States,Events> to) {
+        super.stateChanged(from, to);
+        try {
+            lock.lock();
+            previous = StateMachineUtils.id(from);
+            current = StateMachineUtils.id(to);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+}

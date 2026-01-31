@@ -37,15 +37,41 @@ repositories {
     mavenCentral()
 }
 
+import org.apache.tools.ant.taskdefs.condition.Os
+def getPlatform() {
+    String vendor = System.getProperty("os.name").toLowerCase()
+    String arch = System.getProperty("os.arch").toLowerCase()
+    
+    String osPart
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) osPart = "windows"
+    else if (Os.isFamily(Os.FAMILY_MAC)) osPart = "macosx"
+    else osPart = "linux"
+
+    // Normalize architecture names to FFmpeg/JavaCPP standards
+    String archPart
+    if (arch in ['x86_64', 'amd64']) archPart = "x86_64"
+    else if (arch in ['arm64', 'aarch64']) archPart = "arm64"
+    else archPart = arch
+
+    return "${osPart}-${archPart}"
+}
+ext.ffmpegPlatform = getPlatform()
+
 dependencies {
     constraints {
         implementation "org.springframework.statemachine:spring-statemachine-starter:3.2.1"
+        implementation "org.springframework.statemachine:spring-statemachine-test:3.2.1"
         implementation "org.springframework.boot:spring-boot-starter:3.2.12" //TODO:is there a newer version that is compatible with statemachine?
         implementation "org.springframework.boot:spring-boot-starter-test:3.2.12"
         implementation "org.junit.platform:junit-platform-launcher:6.0.1"
         implementation "ch.qos.logback:logback-classic:1.5.21"
         implementation "org.apache.logging.log4j:log4j-to-slf4j:2.25.2"
         implementation "org.slf4j:jul-to-slf4j:2.0.17"
+        implementation "org.awaitility:awaitility:4.3.0"
+
+        implementation "org.bytedeco:ffmpeg:7.1.1-1.5.12"
+        implementation "org.bytedeco:ffmpeg:7.1.1-1.5.12:${ffmpegPlatform}"
+        implementation "org.bytedeco:javacpp:1.5.12"
     }
 }
 
@@ -62,3 +88,4 @@ java {
         languageVersion = JavaLanguageVersion.of(25)
     }
 }
+
