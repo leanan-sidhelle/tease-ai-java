@@ -24,41 +24,31 @@
  * 
  * For more information, please refer to <https://unlicense.org>
  */
-package com.github.leanan.sidhelle.media.api;
+package com.github.leanan.sidhelle.media.api.model;
 
-import org.bytedeco.ffmpeg.avcodec.*;
-import org.bytedeco.ffmpeg.avformat.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.List;
+import org.bytedeco.ffmpeg.avutil.AVFrame;
 
 /**
- * Central registry for native FFmpeg contexts and thread-safe data queues.
- * Manages the lifecycle of demuxers, decoders, and data buffers.
+ * Abstraction for raw media data.
+ * Wraps native {@link AVFrame} and provides a mechanism for application-specific
+ * frame types (e.g., converted images or audio buffers).
  * @author L. Sidhelle &ltleanan-sidhelle@yahoo.com&gt
  */
-public interface MediaState extends AutoCloseable {
-    /** @return The number of input sources registered. */
-    int getSourceCount();
+public interface MediaFrame extends AutoCloseable {
+    
+    /** @return Presentation Timestamp (PTS). */
+    long getPts();
 
-    /** @param source Ordinal index of the source. */
-    SourceSpec getSourceSpec(int source);
+    /** @return The 0-indexed ordinal of the input source. */
+    int getSourceIndex();
 
-    /** @param source Ordinal index of the source. */
-    int getStreamCount(int source);
+    /** @return The 0-indexed stream index within the source. */
+    int getStreamIndex();
 
-    /** @return The native Format Context for demuxing. */
-    AVFormatContext formatContext(int source);
-
-    /** @return The native Codec Context for decoding. */
-    AVCodecContext codecContext(int source, int stream);
-
-    /** @return Queue for encoded {@link AVPacket} data (Demuxer -> Decoder). */
-    BlockingQueue<AVPacket> packetQueue(int source, int stream);
-
-    /** @return Queue for raw {@link MediaFrame} data (Decoder -> Processor). */
-    BlockingQueue<MediaFrame> frameQueue(int source, int stream);
-
-    /** Frees all native resources associated with all sources. */
-    @Override
-    void close();
+    /**
+     * TODO:
+     * @return 
+     */
+    Metadata getMetadata();
+    
 }

@@ -24,60 +24,72 @@
  * 
  * For more information, please refer to <https://unlicense.org>
  */
-package com.github.leanan.sidhelle.media.api;
+package com.github.leanan.sidhelle.media.api.model;
 
-/**
- * TODO:
- * @author L. Sidhelle &ltleanan-sidhelle@yahoo.com&gt
- */
 import org.bytedeco.ffmpeg.avutil.AVFrame;
-import org.bytedeco.ffmpeg.global.avutil;
+import java.awt.image.BufferedImage;
 
 /**
- * An audio-specific implementation of {@link MediaFrame}.
- * Holds both the native {@link AVFrame} and the interleaved PCM data 
- * ready for standard Java Audio APIs.
+ * A video-specific implementation of {@link MediaFrame}.
+ * Maintains a reference to the native {@link AVFrame} until processed, 
+ * and holds the converted {@link BufferedImage}.
  * 
  * @param nativeFrame The underlying native FFmpeg frame.
- * @param audioData   Interleaved PCM samples (e.g., S16 or Float32).
- * @param pts         Presentation timestamp.
+ * @param image       The Java2D representation of the frame.
+ * @param pts         Presentation timestamp in stream timebase.
  * @param source      The ordinal index of the input source.
- * @param stream      The stream index within the source.
+ * @param stream      The index of the stream within the source.
+ * @author L. Sidhelle &ltleanan-sidhelle@yahoo.com&gt
  */
-public record AudioFrame(
-    AVFrame nativeFrame,
-    byte[] audioData,
+public record VideoFrame(
     long pts,
     int source,
-    int stream
+    int stream,
+    Metadata metadata,
+    BufferedImage image
 ) implements MediaFrame {
 
     /**
-     * Factory method to construct an AudioFrame with pre-converted PCM data.
+     * Constructs a VideoFrame by converting the native frame using {@link ImageUtils}.
      * 
      * @param nativeFrame The raw decoded frame.
-     * @param audioData   The interleaved PCM byte buffer.
      * @param source      The source ID.
      * @param stream      The stream ID.
-     * @return A new AudioFrame instance.
+     * @return A new VideoFrame containing the converted image.
      */
-    public static AudioFrame of(AVFrame nativeFrame, byte[] audioData, int source, int stream) {
-        return new AudioFrame(nativeFrame, audioData, nativeFrame.pts(), source, stream);
+    public static VideoFrame of(long pts, int source, int stream,BufferedImage img) {
+        return new VideoFrame(
+                pts,
+                source,
+                stream,
+                null,
+                img);
+    }
+    
+    /**
+     * Constructs a VideoFrame by converting the native frame using {@link ImageUtils}.
+     * 
+     * @param nativeFrame The raw decoded frame.
+     * @param source      The source ID.
+     * @param stream      The stream ID.
+     * @return A new VideoFrame containing the converted image.
+     */
+    public static VideoFrame of(long pts, int source, int stream,Metadata metadata,BufferedImage img) {
+        return new VideoFrame(
+                pts,
+                source,
+                stream,
+                metadata,
+                img);
     }
 
-    @Override public AVFrame getNativeFrame() { return nativeFrame; }
     @Override public long getPts() { return pts; }
     @Override public int getSourceIndex() { return source; }
     @Override public int getStreamIndex() { return stream; }
-
-    /**
-     * Releases the native FFmpeg audio frame.
-     */
+    @Override public Metadata getMetadata() { return metadata; }
+    
     @Override
     public void close() {
-        if (nativeFrame != null && !nativeFrame.isNull()) {
-            avutil.av_frame_unref(nativeFrame);
-            avutil.av_frame_free(nativeFrame);
-        }
+        //placeholder, right now nothing to do here...
     }
 }

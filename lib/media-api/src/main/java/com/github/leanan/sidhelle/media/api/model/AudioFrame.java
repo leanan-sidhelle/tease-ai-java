@@ -24,60 +24,79 @@
  * 
  * For more information, please refer to <https://unlicense.org>
  */
-package com.github.leanan.sidhelle.media.api;
-
-import org.bytedeco.ffmpeg.avutil.AVFrame;
-import org.bytedeco.ffmpeg.global.avutil;
-import java.awt.image.BufferedImage;
+package com.github.leanan.sidhelle.media.api.model;
 
 /**
- * A video-specific implementation of {@link MediaFrame}.
- * Maintains a reference to the native {@link AVFrame} until processed, 
- * and holds the converted {@link BufferedImage}.
- * 
- * @param nativeFrame The underlying native FFmpeg frame.
- * @param image       The Java2D representation of the frame.
- * @param pts         Presentation timestamp in stream timebase.
- * @param source      The ordinal index of the input source.
- * @param stream      The index of the stream within the source.
+ * TODO:
  * @author L. Sidhelle &ltleanan-sidhelle@yahoo.com&gt
  */
-public record VideoFrame(
-    AVFrame nativeFrame,
-    BufferedImage image,
+import org.bytedeco.ffmpeg.avutil.AVFrame;
+
+/**
+ * An audio-specific implementation of {@link MediaFrame}.
+ * Holds both the native {@link AVFrame} and the interleaved PCM data 
+ * ready for standard Java Audio APIs.
+ * 
+ * @param nativeFrame The underlying native FFmpeg frame.
+ * @param audioData   Interleaved PCM samples (e.g., S16 or Float32).
+ * @param pts         Presentation timestamp.
+ * @param source      The ordinal index of the input source.
+ * @param stream      The stream index within the source.
+ */
+public record AudioFrame(
     long pts,
     int source,
-    int stream
+    int stream,
+    Metadata metadata,
+    byte[] audioData
 ) implements MediaFrame {
 
     /**
-     * Constructs a VideoFrame by converting the native frame using {@link ImageUtils}.
+     * Factory method to construct an AudioFrame with pre-converted PCM data.
      * 
      * @param nativeFrame The raw decoded frame.
+     * @param audioData   The interleaved PCM byte buffer.
      * @param source      The source ID.
      * @param stream      The stream ID.
-     * @return A new VideoFrame containing the converted image.
+     * @return A new AudioFrame instance.
      */
-    public static VideoFrame of(AVFrame nativeFrame, int source, int stream,BufferedImage img) {
-        return new VideoFrame(nativeFrame, img, nativeFrame.pts(), source, stream);
+    public static AudioFrame of(long pts,int source,int stream,byte[] audioData) {
+        return new AudioFrame(
+            pts,
+            source,
+            stream,
+            null,
+            audioData); 
     }
 
-    @Override public AVFrame getNativeFrame() { return nativeFrame; }
+    /**
+     * Factory method to construct an AudioFrame with pre-converted PCM data.
+     * 
+     * @param nativeFrame The raw decoded frame.
+     * @param audioData   The interleaved PCM byte buffer.
+     * @param source      The source ID.
+     * @param stream      The stream ID.
+     * @return A new AudioFrame instance.
+     */
+    public static AudioFrame of(long pts,int source,int stream,Metadata metadata,byte[] audioData) {
+        return new AudioFrame(
+            pts,
+            source,
+            stream,
+            metadata,
+            audioData); 
+    }
+
     @Override public long getPts() { return pts; }
     @Override public int getSourceIndex() { return source; }
     @Override public int getStreamIndex() { return stream; }
-
+    @Override public Metadata getMetadata() { return metadata; }
+    
     /**
-     * Correctly unreferences and frees the native AVFrame.
-     * Must be called by the consumer thread once processing is finished.
+     * Releases the native FFmpeg audio frame.
      */
     @Override
     public void close() {
-        if (nativeFrame != null && !nativeFrame.isNull()) {
-            // Unref decrements the internal reference count of the data buffers.
-            avutil.av_frame_unref(nativeFrame);
-            // Free releases the actual struct pointer.
-            avutil.av_frame_free(nativeFrame);
-        }
+        //nothing to do here right now...
     }
 }

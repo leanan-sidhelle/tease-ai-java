@@ -24,29 +24,27 @@
  * 
  * For more information, please refer to <https://unlicense.org>
  */
-
 package com.github.leanan.sidhelle.media.api;
 
-import org.bytedeco.ffmpeg.avutil.AVFrame;
-
 /**
- * Abstraction for raw media data.
- * Wraps native {@link AVFrame} and provides a mechanism for application-specific
- * frame types (e.g., converted images or audio buffers).
+ * High-level interface for media playback control.
  * @author L. Sidhelle &ltleanan-sidhelle@yahoo.com&gt
  */
-public interface MediaFrame extends AutoCloseable {
-    
-    /** @return The underlying FFmpeg native frame. */
-    AVFrame getNativeFrame();
+public interface MediaPlayer extends AutoCloseable {
 
-    /** @return Presentation Timestamp (PTS). */
-    long getPts();
+    /** Starts or resumes playback. */
+    void play();
 
-    /** @return The 0-indexed ordinal of the input source. */
-    int getSourceIndex();
+    /** Pauses playback, maintaining the current position. */
+    void pause();
 
-    /** @return The 0-indexed stream index within the source. */
-    int getStreamIndex();
+    /** Stops playback and resets the session. */
+    void stop();
 
+    /** @return true if the player is currently processing data. */
+    boolean isPlaying();
+
+    /** @return true if all sources have reached EOF and queues are drained. */
+    boolean isFinished();
 }
+
